@@ -236,6 +236,9 @@ export default function Header() {
                     <Heart className="w-5 h-5 mr-2" />
                     Favorites
                   </span>
+                  <span className="bg-amber-600 text-white text-xs rounded-full px-2 py-1">
+                    {favoritescount}
+                  </span>
                 </button>
                 <button
                   onClick={() => navigate("/cart")}

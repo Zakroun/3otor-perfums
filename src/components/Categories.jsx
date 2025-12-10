@@ -101,7 +101,7 @@ export default function Categories() {
             {/* Content */}
             <div className="relative z-10 p-8 md:p-10">
               {/* Icon Container */}
-              <div className="mb-6 relative">
+              <div className="mb-6 mt-5 relative">
                 <div className="absolute inset-0 bg-gradient-to-br from-amber-500/20 to-amber-600/20 rounded-2xl blur-xl"></div>
                 <div className="relative w-20 h-20 bg-gradient-to-br from-amber-500/10 to-amber-600/10 rounded-2xl border border-amber-500/20 backdrop-blur-sm flex items-center justify-center group-hover:scale-110 transition-transform duration-500">
                   <category.icon className="w-10 h-10 text-amber-600 group-hover:text-amber-700 transition-colors duration-500" />

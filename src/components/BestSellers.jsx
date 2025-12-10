@@ -14,6 +14,7 @@ import { perfumes } from "../data/data";
 import { addToCart } from "../data/perfumslice";
 import { useDispatch } from "react-redux";
 import { addToFavorites } from "../data/perfumslice";
+
 export default function BestSellers() {
   const bestSellers = perfumes.slice(0, 11);
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -21,6 +22,7 @@ export default function BestSellers() {
   const [isAutoPlaying, setIsAutoPlaying] = useState(true);
   const navigate = useNavigate();
   const dispatch = useDispatch();
+
   // Items per slide based on screen size
   const getItemsPerSlide = () => {
     if (window.innerWidth < 640) return 1;
@@ -74,10 +76,31 @@ export default function BestSellers() {
     return Math.round(price - (price * discount) / 100);
   };
 
+  // Handle button clicks with event propagation prevention
+  const handleAddToCart = (e, product) => {
+    e.stopPropagation();
+    dispatch(addToCart(product));
+  };
+
+  const handleAddToFavorites = (e, product) => {
+    e.stopPropagation();
+    dispatch(addToFavorites(product));
+  };
+
+  const handleQuickView = (e, product) => {
+    e.stopPropagation();
+    console.log("Quick view:", product.id);
+    // You can implement quick view modal here
+  };
+
+  const handleCardClick = (productId) => {
+    navigate(`/product/${productId}`);
+  };
+
   return (
     <section className="relative px-4 sm:px-6 lg:px-8 py-16 md:py-24 max-w-7xl mx-auto overflow-hidden">
       {/* Background Pattern */}
-      <div className="absolute inset-0 opacity-5">
+      {/* <div className="absolute inset-0 opacity-5">
         <div
           className="absolute inset-0"
           style={{
@@ -85,7 +108,7 @@ export default function BestSellers() {
             backgroundSize: "30px 30px",
           }}
         ></div>
-      </div>
+      </div> */}
 
       {/* Section Header */}
       <div className="relative z-10 text-center mb-12 md:mb-16">
@@ -157,7 +180,6 @@ export default function BestSellers() {
         >
           {bestSellers.map((product) => (
             <div
-              onClick={() => navigate(`/product/${product.id}`)}
               key={product.id}
               className={`flex-shrink-0 cursor-pointer px-2 sm:px-3 ${
                 itemsPerSlide === 1
@@ -168,6 +190,7 @@ export default function BestSellers() {
                   ? "w-1/3"
                   : "w-1/4"
               }`}
+              onClick={() => handleCardClick(product.id)}
             >
               <div className="group relative bg-gradient-to-br from-white via-amber-50 to-amber-100 rounded-3xl p-4 sm:p-6 shadow-lg hover:shadow-2xl transition-all duration-500 overflow-hidden">
                 {/* Badges */}
@@ -185,7 +208,12 @@ export default function BestSellers() {
                 </div>
 
                 {/* Wishlist Button */}
-                <button onClick={()=>dispatch(addToFavorites(product))} className="absolute top-4 right-4 z-20 p-2 bg-white/80 backdrop-blur-sm rounded-full shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-110 hover:bg-red-50 group/wishlist">
+                <button
+                  onClick={(e) => handleAddToFavorites(e, product)}
+                  onMouseEnter={() => setHoveredCard(product.id)}
+                  onMouseLeave={() => setHoveredCard(null)}
+                  className="absolute top-4 right-4 z-20 p-2 bg-white/80 backdrop-blur-sm rounded-full shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-110 hover:bg-red-50 group/wishlist"
+                >
                   <Heart
                     className={`w-5 h-5 transition-colors duration-300 ${
                       hoveredCard === product.id
@@ -208,11 +236,11 @@ export default function BestSellers() {
                           // Fallback if image doesn't load
                           e.target.style.display = "none";
                           e.target.parentElement.innerHTML = `
-            <div class="w-full h-full flex flex-col items-center justify-center bg-gradient-to-br from-amber-50 to-amber-100">
-              <div class="text-4xl font-bold text-amber-600 mb-2">${product.title}</div>
-              <div class="text-sm text-amber-700 font-medium">${product.brand}</div>
-            </div>
-          `;
+                            <div class="w-full h-full flex flex-col items-center justify-center bg-gradient-to-br from-amber-50 to-amber-100">
+                              <div class="text-4xl font-bold text-amber-600 mb-2">${product.title}</div>
+                              <div class="text-sm text-amber-700 font-medium">${product.brand}</div>
+                            </div>
+                          `;
                         }}
                       />
                     </div>
@@ -224,13 +252,8 @@ export default function BestSellers() {
                       }`}
                     >
                       <button
+                        onClick={(e) => handleQuickView(e, product)}
                         className="transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300 p-3 bg-white rounded-full shadow-lg hover:shadow-xl hover:scale-110"
-                        onClick={(e) => {
-                          e.preventDefault();
-                          e.stopPropagation();
-                          // Handle quick view functionality
-                          console.log("Quick view:", product.id);
-                        }}
                       >
                         <Eye className="w-6 h-6 text-amber-700" />
                       </button>
@@ -287,8 +310,8 @@ export default function BestSellers() {
 
                   {/* Add to Cart Button */}
                   <button
-                    onClick={() => dispatch(addToCart(product))}
-                    className="rounded-xl w-full py-3 bg-gradient-to-r from-amber-500 to-amber-600 text-white font-semibold overflow-hidden"
+                    onClick={(e) => handleAddToCart(e, product)}
+                    className="group/btn relative rounded-xl w-full py-3 bg-gradient-to-r from-amber-500 to-amber-600 text-white font-semibold overflow-hidden hover:shadow-xl transition-shadow duration-300"
                   >
                     <span className="relative z-10 flex items-center justify-center gap-2">
                       <ShoppingCart className="w-5 h-5 group-hover/btn:scale-110 transition-transform" />
@@ -312,14 +335,14 @@ export default function BestSellers() {
 
       {/* View All Button */}
       <div className="text-center mt-12 md:mt-16">
-        <Link
-          to="/shop"
-          className="group inline-flex items-center gap-2 px-8 py-4 bg-gradient-to-r from-amber-500 to-amber-600 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105"
+        <button
+          onClick={() => navigate("/shop")}
+          className="cursor-pointer group inline-flex items-center gap-2 px-8 py-4 bg-gradient-to-r from-amber-500 to-amber-600 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105"
         >
           <span>View All Products</span>
           <ChevronRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
           <Award className="w-5 h-5 ml-1" />
-        </Link>
+        </button>
       </div>
 
       {/* Custom Styles */}

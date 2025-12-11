@@ -21,6 +21,9 @@ import {
   Instagram,
   MessageCircle,
   Eye,
+  Tag,
+  Users,
+  Calendar,
 } from "lucide-react";
 import { useDispatch } from "react-redux";
 import { addToCart } from "../data/perfumslice";
@@ -37,7 +40,14 @@ export default function Product() {
   const [addedToCart, setAddedToCart] = useState(false);
   const [showShare, setShowShare] = useState(false);
   const [showAllImages, setShowAllImages] = useState(false);
-  // console.log(product)
+  
+  // Get current size price
+  const getCurrentPrice = () => {
+    if (!product?.sizes) return product?.price || 0;
+    const selectedSizeObj = product.sizes.find(size => size.size === selectedSize);
+    return selectedSizeObj ? selectedSizeObj.price : product.price;
+  };
+
   useEffect(() => {
     setIsLoading(true);
     // Find product
@@ -49,25 +59,29 @@ export default function Product() {
     }, 800);
   }, [id]);
 
+  useEffect(() => {
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
+  }, []);
+
   // Related products (for recommendations)
   const relatedProducts = perfumes
     .filter((p) => p.category === product?.category && p.id !== product?.id)
     .slice(0, 4);
 
-  // Sizes available
-  const sizes = ["30ml", "50ml", "100ml", "200ml"];
-
-  // Fragrance notes (example data)
-  const fragranceNotes = {
-    top: ["Bergamot", "Marine Notes", "Lemon"],
-    middle: ["Jasmine", "Neroli", "Sea Notes"],
-    base: ["Musk", "Cedarwood", "Ambergris"],
-  };
   const dispatch = useDispatch();
+  
   // Handle add to cart
   const handleAddToCart = () => {
     setAddedToCart(true);
-    dispatch(addToCart(product));
+    dispatch(addToCart({
+      ...product,
+      selectedSize,
+      quantity,
+      price: getCurrentPrice()
+    }));
     // Animation
     setTimeout(() => {
       setAddedToCart(false);
@@ -204,12 +218,12 @@ export default function Product() {
           {/* Left Column - Product Images */}
           <div className="space-y-6">
             {/* Main Image */}
-            <div className=" rounded-3xl p-8 md:p-12 flex items-center justify-center min-h-[400px] md:min-h-[500px] relative overflow-hidden group">
+            <div className="rounded-3xl p-8 md:p-12 flex items-center justify-center min-h-[400px] md:min-h-[500px] relative overflow-hidden group">
               <div className="absolute inset-0 opacity-10">
                 <div className="absolute top-1/4 left-1/4 w-32 h-32 bg-amber-300 rounded-full mix-blend-multiply filter blur-3xl"></div>
                 <div className="absolute bottom-1/4 right-1/4 w-32 h-32 bg-rose-300 rounded-full mix-blend-multiply filter blur-3xl"></div>
               </div>
-              {/* {console.log('product : ' , product)} */}
+              
               {/* Main Product Image */}
               <div className="relative z-10 w-full h-full">
                 <div className="w-full h-full flex items-center justify-center">
@@ -218,7 +232,7 @@ export default function Product() {
                       <img
                         src={`/assets/images/${product.images[selectedImage]}`}
                         alt={`${product.title} - ${product.brand}`}
-                        className=" rounded-xl w-full h-full transform transition-transform duration-700 group-hover:scale-110"
+                        className="rounded-xl w-full h-full transform transition-transform duration-700 group-hover:scale-110"
                       />
                     ) : (
                       <div className="w-full h-full flex flex-col items-center justify-center bg-gradient-to-br from-amber-50 to-amber-100 p-4 rounded-2xl">
@@ -239,8 +253,19 @@ export default function Product() {
                     )}
                   </div>
                 </div>
-                <div className="absolute -top-4 -right-4 bg-gradient-to-r from-amber-600 to-amber-800 text-white px-4 py-2 rounded-full text-sm font-medium animate-pulse">
-                  Featured
+                
+                {/* Featured/Best Seller Badges */}
+                <div className="absolute -top-4 -right-4 flex flex-col gap-2">
+                  {product.featured && (
+                    <div className="bg-gradient-to-r from-amber-600 to-amber-800 text-white px-4 py-2 rounded-full text-sm font-medium animate-pulse">
+                      Featured
+                    </div>
+                  )}
+                  {product.bestSeller && (
+                    <div className="bg-gradient-to-r from-rose-600 to-rose-800 text-white px-4 py-2 rounded-full text-sm font-medium">
+                      Best Seller
+                    </div>
+                  )}
                 </div>
               </div>
             </div>
@@ -277,15 +302,6 @@ export default function Product() {
                         src={`/assets/images/${image}`}
                         alt={`${product.title} view ${index + 1}`}
                         className="w-full h-full object-cover"
-                        // onError={(e) => {
-                        //   e.target.style.display = "none";
-                        //   const container = e.target.parentElement;
-                        //   container.innerHTML = `
-                        //     <div class="w-full h-full flex flex-col items-center justify-center bg-gradient-to-br from-amber-50 to-amber-100 p-2">
-                        //       <div class="text-lg font-bold text-amber-600">${product.title.substring(0, 10)}</div>
-                        //     </div>
-                        //   `;
-                        // }}
                       />
                       <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors"></div>
                       {selectedImage === index && (
@@ -340,19 +356,28 @@ export default function Product() {
                   </span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-gray-600">Concentration</span>
-                  <span className="font-medium text-gray-900">
-                    Eau de Parfum
-                  </span>
-                </div>
-                <div className="flex justify-between">
                   <span className="text-gray-600">Longevity</span>
-                  <span className="font-medium text-gray-900">8-12 Hours</span>
+                  <span className="font-medium text-gray-900">
+                    {product.longevity || "8-12 Hours"}
+                  </span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-gray-600">Sillage</span>
                   <span className="font-medium text-gray-900">
-                    Moderate to Strong
+                    {product.sillage || "Moderate to Strong"}
+                  </span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-gray-600">Stock Status</span>
+                  <span className={`font-medium ${product.stock > 10 ? 'text-green-600' : product.stock > 0 ? 'text-amber-600' : 'text-red-600'}`}>
+                    {product.stock > 10 ? 'In Stock' : product.stock > 0 ? 'Low Stock' : 'Out of Stock'} ({product.stock})
+                  </span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-gray-600">Best For</span>
+                  <span className="font-medium text-gray-900 text-right">
+                    {product.bestFor?.slice(0, 2).join(', ')}
+                    {product.bestFor?.length > 2 && '...'}
                   </span>
                 </div>
               </div>
@@ -415,7 +440,7 @@ export default function Product() {
                     />
                   ))}
                   <span className="ml-2 text-gray-600">
-                    ({product.reviews})
+                    ({product.reviews} reviews)
                   </span>
                 </div>
               </div>
@@ -431,8 +456,13 @@ export default function Product() {
               {/* Price */}
               <div className="flex items-center gap-4 mb-6">
                 <span className="text-4xl font-bold text-amber-800">
-                  MAD {product.price.toLocaleString()}
+                  MAD {getCurrentPrice().toLocaleString()}
                 </span>
+                {product.sizes && (
+                  <span className="text-sm text-gray-500">
+                    ({selectedSize})
+                  </span>
+                )}
                 <span className="px-3 py-1 bg-amber-100 text-amber-800 rounded-full text-sm font-medium">
                   Free Shipping
                 </span>
@@ -440,68 +470,114 @@ export default function Product() {
             </div>
 
             {/* Fragrance Notes */}
-            <div>
-              <h3 className="text-lg font-bold text-gray-900 mb-4">
-                Fragrance Notes
-              </h3>
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <div className="bg-gradient-to-b from-blue-50 to-blue-100 rounded-2xl p-4">
-                  <div className="text-blue-600 mb-2">Top Notes</div>
-                  <div className="space-y-1">
-                    {fragranceNotes.top.map((note, index) => (
-                      <div key={index} className="flex items-center">
-                        <div className="w-2 h-2 bg-blue-400 rounded-full mr-2"></div>
-                        <span className="text-gray-700">{note}</span>
-                      </div>
-                    ))}
+            {product.notes && (
+              <div>
+                <h3 className="text-lg font-bold text-gray-900 mb-4">
+                  Fragrance Notes
+                </h3>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                  <div className="bg-gradient-to-b from-blue-50 to-blue-100 rounded-2xl p-4">
+                    <div className="text-blue-600 mb-2">Top Notes</div>
+                    <div className="space-y-1">
+                      {product.notes.top.map((note, index) => (
+                        <div key={index} className="flex items-center">
+                          <div className="w-2 h-2 bg-blue-400 rounded-full mr-2"></div>
+                          <span className="text-gray-700">{note}</span>
+                        </div>
+                      ))}
+                    </div>
                   </div>
-                </div>
-                <div className="bg-gradient-to-b from-green-50 to-green-100 rounded-2xl p-4">
-                  <div className="text-green-600 mb-2">Middle Notes</div>
-                  <div className="space-y-1">
-                    {fragranceNotes.middle.map((note, index) => (
-                      <div key={index} className="flex items-center">
-                        <div className="w-2 h-2 bg-green-400 rounded-full mr-2"></div>
-                        <span className="text-gray-700">{note}</span>
-                      </div>
-                    ))}
+                  <div className="bg-gradient-to-b from-green-50 to-green-100 rounded-2xl p-4">
+                    <div className="text-green-600 mb-2">Middle Notes</div>
+                    <div className="space-y-1">
+                      {product.notes.middle.map((note, index) => (
+                        <div key={index} className="flex items-center">
+                          <div className="w-2 h-2 bg-green-400 rounded-full mr-2"></div>
+                          <span className="text-gray-700">{note}</span>
+                        </div>
+                      ))}
+                    </div>
                   </div>
-                </div>
-                <div className="bg-gradient-to-b from-amber-50 to-amber-100 rounded-2xl p-4">
-                  <div className="text-amber-600 mb-2">Base Notes</div>
-                  <div className="space-y-1">
-                    {fragranceNotes.base.map((note, index) => (
-                      <div key={index} className="flex items-center">
-                        <div className="w-2 h-2 bg-amber-400 rounded-full mr-2"></div>
-                        <span className="text-gray-700">{note}</span>
-                      </div>
-                    ))}
+                  <div className="bg-gradient-to-b from-amber-50 to-amber-100 rounded-2xl p-4">
+                    <div className="text-amber-600 mb-2">Base Notes</div>
+                    <div className="space-y-1">
+                      {product.notes.base.map((note, index) => (
+                        <div key={index} className="flex items-center">
+                          <div className="w-2 h-2 bg-amber-400 rounded-full mr-2"></div>
+                          <span className="text-gray-700">{note}</span>
+                        </div>
+                      ))}
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
+            )}
+
+            {/* Best For */}
+            {product.bestFor && (
+              <div>
+                <h3 className="text-lg font-bold text-gray-900 mb-4">
+                  Perfect For
+                </h3>
+                <div className="flex flex-wrap gap-2">
+                  {product.bestFor.map((item, index) => (
+                    <div
+                      key={index}
+                      className="px-4 py-2 bg-gradient-to-r from-amber-50 to-amber-100 text-amber-800 rounded-full text-sm font-medium flex items-center gap-2"
+                    >
+                      <Users className="w-4 h-4" />
+                      {item}
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
 
             {/* Size Selection */}
-            <div>
-              <h3 className="text-lg font-bold text-gray-900 mb-4">
-                Select Size
-              </h3>
-              <div className="flex flex-wrap gap-3">
-                {sizes.map((size) => (
-                  <button
-                    key={size}
-                    onClick={() => setSelectedSize(size)}
-                    className={`px-6 py-3 rounded-xl font-medium transition-all ${
-                      selectedSize === size
-                        ? "bg-gradient-to-r from-amber-600 to-amber-800 text-white shadow-lg"
-                        : "bg-white border-2 border-gray-200 text-gray-700 hover:border-amber-400"
-                    }`}
-                  >
-                    {size}
-                  </button>
-                ))}
+            {product.sizes && (
+              <div>
+                <h3 className="text-lg font-bold text-gray-900 mb-4">
+                  Select Size
+                </h3>
+                <div className="flex flex-wrap gap-3">
+                  {product.sizes.map((sizeObj) => (
+                    <button
+                      key={sizeObj.size}
+                      onClick={() => setSelectedSize(sizeObj.size)}
+                      className={`px-6 py-3 rounded-xl font-medium transition-all relative group ${
+                        selectedSize === sizeObj.size
+                          ? "bg-gradient-to-r from-amber-600 to-amber-800 text-white shadow-lg"
+                          : "bg-white border-2 border-gray-200 text-gray-700 hover:border-amber-400"
+                      }`}
+                    >
+                      {sizeObj.size}
+                      <div className="absolute -bottom-1 left-1/2 transform -translate-x-1/2 translate-y-full bg-gray-900 text-white text-xs py-1 px-2 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap z-10">
+                        MAD {sizeObj.price.toLocaleString()}
+                      </div>
+                    </button>
+                  ))}
+                </div>
+                
+                {/* Size Price Comparison */}
+                <div className="mt-4 bg-gray-50 rounded-xl p-4">
+                  <div className="text-sm text-gray-600 mb-2">Price per ml comparison:</div>
+                  <div className="grid grid-cols-4 gap-2">
+                    {product.sizes.map((sizeObj) => {
+                      const sizeMl = parseInt(sizeObj.size);
+                      const pricePerMl = sizeObj.price / sizeMl;
+                      return (
+                        <div key={sizeObj.size} className="text-center">
+                          <div className="text-xs text-gray-500">{sizeObj.size}</div>
+                          <div className={`text-sm font-medium ${selectedSize === sizeObj.size ? 'text-amber-700' : 'text-gray-700'}`}>
+                            MAD {pricePerMl.toFixed(2)}/ml
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
               </div>
-            </div>
+            )}
 
             {/* Quantity & Add to Cart */}
             <div className="space-y-6">
@@ -527,10 +603,12 @@ export default function Product() {
                 <div className="flex-1">
                   <button
                     onClick={handleAddToCart}
-                    disabled={addedToCart}
+                    disabled={addedToCart || product.stock === 0}
                     className={`w-full h-12 rounded-xl font-bold transition-all flex items-center justify-center gap-3 ${
                       addedToCart
                         ? "bg-green-600 text-white"
+                        : product.stock === 0
+                        ? "bg-gray-400 text-white cursor-not-allowed"
                         : "bg-gradient-to-r from-amber-600 to-amber-800 text-white hover:shadow-xl hover:scale-105"
                     }`}
                   >
@@ -539,22 +617,28 @@ export default function Product() {
                         <Check className="w-5 h-5" />
                         Added to Cart
                       </>
+                    ) : product.stock === 0 ? (
+                      "Out of Stock"
                     ) : (
                       <>
                         <ShoppingBag className="w-5 h-5" />
-                        Add to Cart - MAD{" "}
-                        {(product.price * quantity).toLocaleString()}
+                        Add to Cart - MAD {(getCurrentPrice() * quantity).toLocaleString()}
                       </>
                     )}
                   </button>
                 </div>
               </div>
 
-              {/* Buy Now Button */}
-              {/* <button className="w-full h-12 bg-gradient-to-r from-gray-900 to-gray-800 text-white rounded-xl font-bold hover:shadow-xl transition-all flex items-center justify-center gap-3">
-                <Sparkles className="w-5 h-5" />
-                Buy Now
-              </button> */}
+              {/* Stock Status */}
+              <div className="text-sm text-gray-600">
+                {product.stock > 10 ? (
+                  <span className="text-green-600">✓ In stock - {product.stock} available</span>
+                ) : product.stock > 0 ? (
+                  <span className="text-amber-600">⚠ Low stock - Only {product.stock} left</span>
+                ) : (
+                  <span className="text-red-600">✗ Out of stock</span>
+                )}
+              </div>
             </div>
 
             {/* Trust Badges */}
@@ -584,6 +668,28 @@ export default function Product() {
 
             {/* Additional Info */}
             <div className="space-y-4">
+              {product.longevity && (
+                <div className="flex items-start gap-3">
+                  <Clock className="w-5 h-5 text-amber-600 mt-1 flex-shrink-0" />
+                  <div>
+                    <div className="font-medium text-gray-900">Longevity</div>
+                    <div className="text-sm text-gray-600">
+                      Lasts {product.longevity}
+                    </div>
+                  </div>
+                </div>
+              )}
+              {product.sillage && (
+                <div className="flex items-start gap-3">
+                  <Users className="w-5 h-5 text-amber-600 mt-1 flex-shrink-0" />
+                  <div>
+                    <div className="font-medium text-gray-900">Sillage</div>
+                    <div className="text-sm text-gray-600">
+                      {product.sillage} projection
+                    </div>
+                  </div>
+                </div>
+              )}
               <div className="flex items-start gap-3">
                 <Package className="w-5 h-5 text-amber-600 mt-1 flex-shrink-0" />
                 <div>
@@ -595,24 +701,17 @@ export default function Product() {
                   </div>
                 </div>
               </div>
-              <div className="flex items-start gap-3">
-                <Clock className="w-5 h-5 text-amber-600 mt-1 flex-shrink-0" />
-                <div>
-                  <div className="font-medium text-gray-900">Long Lasting</div>
-                  <div className="text-sm text-gray-600">
-                    8-12 hours of consistent fragrance projection
+              {product.bestSeller && (
+                <div className="flex items-start gap-3">
+                  <Award className="w-5 h-5 text-amber-600 mt-1 flex-shrink-0" />
+                  <div>
+                    <div className="font-medium text-gray-900">Best Seller</div>
+                    <div className="text-sm text-gray-600">
+                      Top selling fragrance in our collection
+                    </div>
                   </div>
                 </div>
-              </div>
-              <div className="flex items-start gap-3">
-                <Award className="w-5 h-5 text-amber-600 mt-1 flex-shrink-0" />
-                <div>
-                  <div className="font-medium text-gray-900">Award Winning</div>
-                  <div className="text-sm text-gray-600">
-                    Best Fragrance Award 2023
-                  </div>
-                </div>
-              </div>
+              )}
             </div>
           </div>
         </div>
@@ -621,7 +720,7 @@ export default function Product() {
         <div className="mt-16">
           <div className="flex items-center justify-between mb-8">
             <h2 className="text-2xl font-bold text-gray-900">
-              Customer Reviews
+              Customer Reviews ({product.reviews})
             </h2>
             <button className="px-6 py-2 border border-amber-600 text-amber-700 rounded-full font-medium hover:bg-amber-50 transition-colors">
               Write a Review
@@ -629,36 +728,67 @@ export default function Product() {
           </div>
 
           <div className="grid md:grid-cols-2 gap-6">
-            {[1, 2, 3, 4].map((review) => (
+            {/* Sample Reviews - You can replace with real reviews */}
+            {[
+              {
+                name: "Alex M.",
+                rating: product.rating,
+                comment: "Absolutely love this fragrance! The longevity is amazing and the scent is exactly what I was looking for.",
+                date: "2 days ago",
+                verified: true
+              },
+              {
+                name: "Sarah J.",
+                rating: product.rating,
+                comment: "Perfect for everyday wear. The notes develop beautifully throughout the day.",
+                date: "1 week ago",
+                verified: true
+              },
+              {
+                name: "Michael T.",
+                rating: product.rating,
+                comment: "Great value for money. The packaging was excellent and delivery was fast.",
+                date: "3 weeks ago",
+                verified: true
+              },
+              {
+                name: "Emma L.",
+                rating: product.rating,
+                comment: "My new favorite perfume! The fragrance is unique and gets me compliments every time I wear it.",
+                date: "1 month ago",
+                verified: true
+              }
+            ].map((review, index) => (
               <div
-                key={review}
+                key={index}
                 className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100"
               >
                 <div className="flex items-center gap-3 mb-4">
                   <div className="w-12 h-12 bg-gradient-to-br from-amber-100 to-amber-200 rounded-full flex items-center justify-center">
-                    <span className="font-bold text-amber-800">U{review}</span>
+                    <span className="font-bold text-amber-800">
+                      {review.name.charAt(0)}
+                    </span>
                   </div>
                   <div>
-                    <div className="font-medium text-gray-900">
-                      User {review}
-                    </div>
+                    <div className="font-medium text-gray-900">{review.name}</div>
                     <div className="flex items-center gap-1">
                       {[1, 2, 3, 4, 5].map((star) => (
                         <Star
                           key={star}
-                          className="w-4 h-4 text-amber-500 fill-current"
+                          className={`w-4 h-4 ${
+                            star <= Math.round(review.rating)
+                              ? "text-amber-500 fill-current"
+                              : "text-gray-300"
+                          }`}
                         />
                       ))}
                     </div>
                   </div>
                 </div>
-                <p className="text-gray-600 mb-4">
-                  "This fragrance is absolutely stunning. The longevity is
-                  impressive and the scent profile is exactly what I was looking
-                  for."
-                </p>
+                <p className="text-gray-600 mb-4">"{review.comment}"</p>
                 <div className="text-sm text-gray-500">
-                  Verified Purchase • 2 days ago
+                  {review.verified && <span className="text-green-600 mr-2">✓ Verified Purchase</span>}
+                  • {review.date}
                 </div>
               </div>
             ))}
@@ -676,9 +806,9 @@ export default function Product() {
                 <div
                   key={related.id}
                   onClick={() => navigate(`/product/${related.id}`)}
-                  className="group bg-white cursor-pointer rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-2 border border-gray-100 overflow-hidden cursor-pointer"
+                  className="group bg-white cursor-pointer rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-2 border border-gray-100 overflow-hidden"
                 >
-                  <div className="h-48 bg-white flex items-center justify-center p-4">
+                  <div className="h-48 bg-white flex items-center justify-center p-4 relative">
                     {related.images && related.images.length > 0 ? (
                       <img
                         src={`/assets/images/${related.images[0]}`}
@@ -709,16 +839,36 @@ export default function Product() {
                           : "👥"}
                       </div>
                     )}
+                    
+                    {/* Product badges */}
+                    <div className="absolute top-3 right-3 flex flex-col gap-1">
+                      {related.featured && (
+                        <div className="bg-gradient-to-r from-amber-600 to-amber-800 text-white text-xs px-2 py-1 rounded-full">
+                          Featured
+                        </div>
+                      )}
+                      {related.bestSeller && (
+                        <div className="bg-gradient-to-r from-rose-600 to-rose-800 text-white text-xs px-2 py-1 rounded-full">
+                          Best Seller
+                        </div>
+                      )}
+                    </div>
                   </div>
                   <div className="p-4">
                     <h3 className="font-bold text-gray-900 mb-1">
                       {related.title}
                     </h3>
                     <p className="text-gray-500 text-sm mb-2">
-                      {related.category}
+                      {related.category} • {related.brand}
                     </p>
-                    <div className="text-xl font-bold text-amber-800">
-                      MAD {related.price.toLocaleString()}
+                    <div className="flex items-center justify-between">
+                      <div className="text-xl font-bold text-amber-800">
+                        MAD {related.price.toLocaleString()}
+                      </div>
+                      <div className="flex items-center text-sm text-gray-600">
+                        <Star className="w-4 h-4 text-amber-500 fill-current mr-1" />
+                        {related.rating} ({related.reviews})
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -733,16 +883,21 @@ export default function Product() {
             <div>
               <h3 className="text-2xl font-bold mb-2">Need Help Choosing?</h3>
               <p className="text-amber-100">
-                Our fragrance experts are here to help you find your perfect
-                scent
+                Our fragrance experts are here to help you find your perfect scent
               </p>
             </div>
             <div className="flex gap-4">
-              <button onClick={()=>navigate('/contact')} className="px-6 py-3 bg-white text-amber-900 rounded-full font-medium hover:bg-amber-100 transition-colors flex items-center gap-2">
+              <button
+                onClick={() => navigate("/contact")}
+                className="px-6 py-3 bg-white text-amber-900 rounded-full font-medium hover:bg-amber-100 transition-colors flex items-center gap-2"
+              >
                 <MessageCircle className="w-5 h-5" />
                 Live Chat
               </button>
-              <button onClick={()=>navigate('/contact')} className="px-6 py-3 border-2 border-white text-white rounded-full font-medium hover:bg-white/10 transition-colors">
+              <button
+                onClick={() => navigate("/contact")}
+                className="px-6 py-3 border-2 border-white text-white rounded-full font-medium hover:bg-white/10 transition-colors"
+              >
                 Book Consultation
               </button>
             </div>

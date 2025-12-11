@@ -13,7 +13,15 @@ import {
 } from "lucide-react";
 import { FcGoogle } from "react-icons/fc";
 import { Link } from "react-router-dom";
+import { useEffect } from "react";
 export default function Login() {
+  useEffect(() => {
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
+  }, []);
+
   const [showPassword, setShowPassword] = useState(false);
   const [formData, setFormData] = useState({
     email: "",
@@ -38,30 +46,30 @@ export default function Login() {
 
   const validateForm = () => {
     const newErrors = {};
-    
+
     if (!formData.email) {
       newErrors.email = "Email is required";
     } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
       newErrors.email = "Email is invalid";
     }
-    
+
     if (!formData.password) {
       newErrors.password = "Password is required";
     } else if (formData.password.length < 6) {
       newErrors.password = "Password must be at least 6 characters";
     }
-    
+
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
 
   const handleLogin = async (e) => {
     e.preventDefault();
-    
+
     if (!validateForm()) {
       return;
     }
-    
+
     setIsLoading(true);
     setErrors({});
 
@@ -159,7 +167,9 @@ export default function Login() {
             <div className="bg-white rounded-3xl shadow-2xl p-6 md:p-8">
               {/* Form Header */}
               <div className="mb-8">
-                <h3 className="text-2xl font-bold text-gray-900 mb-2">Sign In</h3>
+                <h3 className="text-2xl font-bold text-gray-900 mb-2">
+                  Sign In
+                </h3>
                 <p className="text-gray-600">
                   Enter your credentials to access your account
                 </p>
@@ -201,15 +211,17 @@ export default function Login() {
                         onChange={handleChange}
                         required
                         className={`w-full pl-10 pr-4 py-3 border rounded-xl focus:ring-2 focus:ring-amber-500 focus:border-transparent outline-none transition-all ${
-                          errors.email 
-                            ? "border-red-300 focus:ring-red-500" 
+                          errors.email
+                            ? "border-red-300 focus:ring-red-500"
                             : "border-gray-300"
                         }`}
                         placeholder="your@email.com"
                       />
                     </div>
                     {errors.email && (
-                      <p className="mt-1 text-sm text-red-600">{errors.email}</p>
+                      <p className="mt-1 text-sm text-red-600">
+                        {errors.email}
+                      </p>
                     )}
                   </div>
 
@@ -237,8 +249,8 @@ export default function Login() {
                         onChange={handleChange}
                         required
                         className={`w-full pl-10 pr-12 py-3 border rounded-xl focus:ring-2 focus:ring-amber-500 focus:border-transparent outline-none transition-all ${
-                          errors.password 
-                            ? "border-red-300 focus:ring-red-500" 
+                          errors.password
+                            ? "border-red-300 focus:ring-red-500"
                             : "border-gray-300"
                         }`}
                         placeholder="Enter your password"
@@ -256,7 +268,9 @@ export default function Login() {
                       </button>
                     </div>
                     {errors.password && (
-                      <p className="mt-1 text-sm text-red-600">{errors.password}</p>
+                      <p className="mt-1 text-sm text-red-600">
+                        {errors.password}
+                      </p>
                     )}
                   </div>
 
@@ -450,12 +464,14 @@ export default function Login() {
                     <div className="text-3xl font-bold text-amber-800 mb-1">
                       🎯
                     </div>
-                    <div className="text-sm text-gray-600">Personalized Recommendations</div>
+                    <div className="text-sm text-gray-600">
+                      Personalized Recommendations
+                    </div>
                   </div>
                 </div>
               </div>
 
-              {/* Security Info */}
+              {/* Security Info
               <div className="bg-gradient-to-r from-blue-50 to-blue-100 rounded-3xl border border-blue-200 p-6">
                 <div className="flex items-start gap-3">
                   <div className="w-8 h-8 rounded-full bg-blue-600 flex items-center justify-center flex-shrink-0">
@@ -466,47 +482,58 @@ export default function Login() {
                       Secure & Encrypted
                     </h4>
                     <p className="text-sm text-gray-600">
-                      Your login is protected with industry-standard encryption. 
+                      Your login is protected with industry-standard encryption.
                       Your personal information is always safe with us.
                     </p>
                   </div>
                 </div>
               </div>
-
-              {/* Testimonials */}
+                 */}
+              {/* Testimonials 
               <div className="bg-white rounded-3xl shadow-xl p-6">
-                <h3 className="text-xl font-bold text-gray-900 mb-4">What Our Members Say</h3>
+                <h3 className="text-xl font-bold text-gray-900 mb-4">
+                  What Our Members Say
+                </h3>
                 <div className="space-y-4">
                   <div className="bg-amber-50 rounded-2xl p-4">
                     <p className="text-gray-700 italic text-sm mb-2">
-                      "Signing in lets me track all my orders and save my favorite scents. The wishlist feature is a game-changer!"
+                      "Signing in lets me track all my orders and save my
+                      favorite scents. The wishlist feature is a game-changer!"
                     </p>
                     <div className="flex items-center">
                       <div className="w-8 h-8 rounded-full bg-amber-200 flex items-center justify-center text-sm font-bold text-amber-800 mr-2">
                         S
                       </div>
                       <div>
-                        <p className="text-sm font-semibold text-gray-900">Sarah M.</p>
-                        <p className="text-xs text-gray-600">Member since 2021</p>
+                        <p className="text-sm font-semibold text-gray-900">
+                          Sarah M.
+                        </p>
+                        <p className="text-xs text-gray-600">
+                          Member since 2021
+                        </p>
                       </div>
                     </div>
                   </div>
                   <div className="bg-rose-50 rounded-2xl p-4">
                     <p className="text-gray-700 italic text-sm mb-2">
-                      "The personalized recommendations based on my purchase history help me discover amazing new fragrances."
+                      "The personalized recommendations based on my purchase
+                      history help me discover amazing new fragrances."
                     </p>
                     <div className="flex items-center">
                       <div className="w-8 h-8 rounded-full bg-rose-200 flex items-center justify-center text-sm font-bold text-rose-800 mr-2">
                         A
                       </div>
                       <div>
-                        <p className="text-sm font-semibold text-gray-900">Ahmed K.</p>
+                        <p className="text-sm font-semibold text-gray-900">
+                          Ahmed K.
+                        </p>
                         <p className="text-xs text-gray-600">VIP Member</p>
                       </div>
                     </div>
                   </div>
                 </div>
               </div>
+              */}
             </div>
           </div>
 

@@ -73,6 +73,12 @@ export default function Favorites() {
     dispatch(clearFavorites());
     setShowClearConfirm(false);
   };
+  useEffect(() => {
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
+  }, []);
 
   // Navigate to product page
   const handleProductClick = (id) => {
@@ -94,7 +100,7 @@ export default function Favorites() {
             collection and save your favorite scents for later.
           </p>
           <button
-            onClick={() => navigate("/products")}
+            onClick={() => navigate("/shop")}
             className="px-8 py-4 bg-gradient-to-r from-amber-600 to-amber-800 text-white rounded-xl font-bold hover:shadow-xl transition-all flex items-center justify-center gap-2 mx-auto"
           >
             <Sparkles className="w-5 h-5" />

@@ -13,8 +13,15 @@ import {
   Twitter,
   Linkedin,
 } from "lucide-react";
-
+import { useEffect } from "react";
 export default function About() {
+  useEffect(() => {
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
+  }, []);
+  
   return (
     <div className="min-h-screen bg-gradient-to-b from-amber-50 to-white">
       {/* Hero Section */}
@@ -206,32 +213,28 @@ export default function About() {
                   title: "Sourcing Ingredients",
                   description:
                     "We source the finest raw materials from around the world—from Moroccan roses to Indonesian sandalwood.",
-                  image:
-                    "/assets/images/1.jpeg",
+                  image: "/assets/images/1.jpeg",
                 },
                 {
                   step: "02",
                   title: "Expert Blending",
                   description:
                     "Our master perfumers blend ingredients with precision, creating harmonious and long-lasting fragrances.",
-                  image:
-                    "/assets/images/2.jpeg",
+                  image: "/assets/images/2.jpeg",
                 },
                 {
                   step: "03",
                   title: "Quality Testing",
                   description:
                     "Every batch undergoes rigorous testing to ensure consistent quality and perfect scent development.",
-                  image:
-                    "/assets/images/3.jpeg",
+                  image: "/assets/images/3.jpeg",
                 },
                 {
                   step: "04",
                   title: "Packaging & Delivery",
                   description:
                     "Elegant packaging protects your fragrance until it reaches your hands, ready to create memories.",
-                  image:
-                    "/assets/images/4.jpeg",
+                  image: "/assets/images/4.jpeg",
                 },
               ].map((item, index) => (
                 <div
@@ -297,24 +300,21 @@ export default function About() {
                 name: "Ahmed Benali",
                 role: "Master Perfumer",
                 experience: "25+ years",
-                image:
-                  "/assets/images/seller1.jpeg",
+                image: "/assets/images/seller1.jpeg",
                 specialty: "Oriental Scents",
               },
               {
                 name: "Sophie Martin",
                 role: "Fragrance Director",
                 experience: "18 years",
-                image:
-                  "/assets/images/seller3.jpeg",
+                image: "/assets/images/seller3.jpeg",
                 specialty: "Floral Notes",
               },
               {
                 name: "Karim Alami",
                 role: "Sourcing Specialist",
                 experience: "15 years",
-                image:
-                  "/assets/images/seller2.jpeg",
+                image: "/assets/images/seller2.jpeg",
                 specialty: "Rare Ingredients",
               },
             ].map((member, index) => (

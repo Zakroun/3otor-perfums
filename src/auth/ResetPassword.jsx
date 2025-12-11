@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { Lock, Eye, EyeOff, CheckCircle, Shield, Key } from "lucide-react";
-
+import { useEffect } from "react";
 export default function ResetPassword() {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -11,6 +11,12 @@ export default function ResetPassword() {
   const [isSuccess, setIsSuccess] = useState(false);
   const [errors, setErrors] = useState({});
   const [passwordStrength, setPasswordStrength] = useState(0);
+  useEffect(() => {
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
+  }, []);
 
   const navigate = useNavigate();
   const location = useLocation();
@@ -64,7 +70,7 @@ export default function ResetPassword() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
+
     if (!validateForm()) {
       return;
     }
@@ -127,7 +133,8 @@ export default function ResetPassword() {
                     Password Updated!
                   </h3>
                   <p className="text-gray-600 mb-6">
-                    Your password has been successfully reset. You can now sign in with your new password.
+                    Your password has been successfully reset. You can now sign
+                    in with your new password.
                   </p>
                   <p className="text-sm text-gray-500">
                     Redirecting to login page...
@@ -181,33 +188,45 @@ export default function ResetPassword() {
                             )}
                           </button>
                         </div>
-                        
+
                         {/* Password Strength */}
                         {password && (
                           <div className="mt-3">
                             <div className="flex justify-between text-sm mb-1">
-                              <span className="text-gray-600">Password strength:</span>
-                              <span className={`font-medium ${
-                                passwordStrength === 0 ? "text-red-600" :
-                                passwordStrength === 1 ? "text-orange-600" :
-                                passwordStrength === 2 ? "text-yellow-600" :
-                                passwordStrength === 3 ? "text-green-600" :
-                                "text-emerald-700"
-                              }`}>
+                              <span className="text-gray-600">
+                                Password strength:
+                              </span>
+                              <span
+                                className={`font-medium ${
+                                  passwordStrength === 0
+                                    ? "text-red-600"
+                                    : passwordStrength === 1
+                                    ? "text-orange-600"
+                                    : passwordStrength === 2
+                                    ? "text-yellow-600"
+                                    : passwordStrength === 3
+                                    ? "text-green-600"
+                                    : "text-emerald-700"
+                                }`}
+                              >
                                 {getStrengthText()}
                               </span>
                             </div>
                             <div className="w-full bg-gray-200 rounded-full h-2">
                               <div
                                 className={`h-2 rounded-full ${getStrengthColor()} transition-all duration-300`}
-                                style={{ width: `${(passwordStrength / 4) * 100}%` }}
+                                style={{
+                                  width: `${(passwordStrength / 4) * 100}%`,
+                                }}
                               ></div>
                             </div>
                           </div>
                         )}
-                        
+
                         {errors.password && (
-                          <p className="mt-2 text-sm text-red-600">{errors.password}</p>
+                          <p className="mt-2 text-sm text-red-600">
+                            {errors.password}
+                          </p>
                         )}
                       </div>
 
@@ -233,7 +252,9 @@ export default function ResetPassword() {
                           />
                           <button
                             type="button"
-                            onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                            onClick={() =>
+                              setShowConfirmPassword(!showConfirmPassword)
+                            }
                             className="absolute inset-y-0 right-0 pr-3 flex items-center"
                           >
                             {showConfirmPassword ? (
@@ -244,9 +265,11 @@ export default function ResetPassword() {
                           </button>
                         </div>
                         {errors.confirmPassword && (
-                          <p className="mt-2 text-sm text-red-600">{errors.confirmPassword}</p>
+                          <p className="mt-2 text-sm text-red-600">
+                            {errors.confirmPassword}
+                          </p>
                         )}
-                        
+
                         {/* Password Match Indicator */}
                         {password && confirmPassword && (
                           <div className="mt-2">
@@ -270,19 +293,37 @@ export default function ResetPassword() {
                           Password Requirements:
                         </h4>
                         <ul className="space-y-1 text-sm text-gray-600">
-                          <li className={`flex items-center ${password.length >= 8 ? "text-green-600" : ""}`}>
+                          <li
+                            className={`flex items-center ${
+                              password.length >= 8 ? "text-green-600" : ""
+                            }`}
+                          >
                             <span className="mr-2">•</span>
                             At least 8 characters long
                           </li>
-                          <li className={`flex items-center ${/[A-Z]/.test(password) ? "text-green-600" : ""}`}>
+                          <li
+                            className={`flex items-center ${
+                              /[A-Z]/.test(password) ? "text-green-600" : ""
+                            }`}
+                          >
                             <span className="mr-2">•</span>
                             Contains uppercase letters
                           </li>
-                          <li className={`flex items-center ${/[0-9]/.test(password) ? "text-green-600" : ""}`}>
+                          <li
+                            className={`flex items-center ${
+                              /[0-9]/.test(password) ? "text-green-600" : ""
+                            }`}
+                          >
                             <span className="mr-2">•</span>
                             Contains numbers
                           </li>
-                          <li className={`flex items-center ${/[^A-Za-z0-9]/.test(password) ? "text-green-600" : ""}`}>
+                          <li
+                            className={`flex items-center ${
+                              /[^A-Za-z0-9]/.test(password)
+                                ? "text-green-600"
+                                : ""
+                            }`}
+                          >
                             <span className="mr-2">•</span>
                             Contains special characters
                           </li>
@@ -398,8 +439,12 @@ export default function ResetPassword() {
                       <Key className="w-4 h-4 text-green-600" />
                     </div>
                     <div>
-                      <p className="font-medium text-gray-900">Strong Password</p>
-                      <p className="text-xs text-gray-600">Protects against unauthorized access</p>
+                      <p className="font-medium text-gray-900">
+                        Strong Password
+                      </p>
+                      <p className="text-xs text-gray-600">
+                        Protects against unauthorized access
+                      </p>
                     </div>
                   </div>
                   <div className="flex items-center gap-2">
@@ -407,8 +452,12 @@ export default function ResetPassword() {
                       <Shield className="w-4 h-4 text-blue-600" />
                     </div>
                     <div>
-                      <p className="font-medium text-gray-900">Encrypted Storage</p>
-                      <p className="text-xs text-gray-600">Your password is securely encrypted</p>
+                      <p className="font-medium text-gray-900">
+                        Encrypted Storage
+                      </p>
+                      <p className="text-xs text-gray-600">
+                        Your password is securely encrypted
+                      </p>
                     </div>
                   </div>
                   <div className="flex items-center gap-2">
@@ -416,14 +465,18 @@ export default function ResetPassword() {
                       <span className="text-sm">🔒</span>
                     </div>
                     <div>
-                      <p className="font-medium text-gray-900">Two-Factor Ready</p>
-                      <p className="text-xs text-gray-600">Enable 2FA for extra security</p>
+                      <p className="font-medium text-gray-900">
+                        Two-Factor Ready
+                      </p>
+                      <p className="text-xs text-gray-600">
+                        Enable 2FA for extra security
+                      </p>
                     </div>
                   </div>
                 </div>
               </div>
 
-              {/* Quick Actions */}
+              {/* Quick Actions 
               <div className="bg-gradient-to-r from-blue-50 to-blue-100 rounded-3xl border border-blue-200 p-6">
                 <div className="text-center">
                   <h4 className="font-bold text-gray-900 mb-3">
@@ -451,6 +504,7 @@ export default function ResetPassword() {
                   </div>
                 </div>
               </div>
+              */}
             </div>
           </div>
         </div>

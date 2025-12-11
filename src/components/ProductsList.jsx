@@ -43,8 +43,14 @@ export default function ProductsList() {
       setSelectedCategory(category);
     }
   }, [category]);
-  console.log("selectedCategory", selectedCategory);
-  //   console.log("Category From URL:", category);
+  // console.log("selectedCategory", selectedCategory);
+  // console.log("Category From URL:", category);
+  useEffect(() => {
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
+  }, []);
 
   // Categories
   const categories = ["All", "Men", "Women", "Unisex"];

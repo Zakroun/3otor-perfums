@@ -7,9 +7,15 @@ export default function CodeVerification() {
   const [isLoading, setIsLoading] = useState(false);
   const [isVerified, setIsVerified] = useState(false);
   const [error, setError] = useState("");
-  const [timer, setTimer] = useState(600); // 10 minutes in seconds
+  const [timer, setTimer] = useState(600);
   const [canResend, setCanResend] = useState(false);
-  
+  useEffect(() => {
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
+  }, []);
+
   const navigate = useNavigate();
   const location = useLocation();
   const email = location.state?.email || "your email";
@@ -31,7 +37,9 @@ export default function CodeVerification() {
   const formatTime = (seconds) => {
     const mins = Math.floor(seconds / 60);
     const secs = seconds % 60;
-    return `${mins.toString().padStart(2, "0")}:${secs.toString().padStart(2, "0")}`;
+    return `${mins.toString().padStart(2, "0")}:${secs
+      .toString()
+      .padStart(2, "0")}`;
   };
 
   const handleChange = (index, value) => {
@@ -71,11 +79,11 @@ export default function CodeVerification() {
         }
       });
       setCode(newCode);
-      
+
       // Focus last input
       const lastFilledIndex = Math.min(digits.length - 1, 5);
       inputRefs.current[lastFilledIndex].focus();
-      
+
       // Auto verify if 6 digits
       if (digits.length === 6) {
         setTimeout(() => handleVerify(pastedData), 100);
@@ -91,7 +99,7 @@ export default function CodeVerification() {
     await new Promise((resolve) => setTimeout(resolve, 1500));
 
     setIsLoading(false);
-    
+
     // Simulate verification (in real app, check against backend)
     if (verificationCode === "123456") {
       setIsVerified(true);
@@ -226,7 +234,7 @@ export default function CodeVerification() {
                           Code expires in: {formatTime(timer)}
                         </span>
                       </div>
-                      
+
                       <button
                         type="button"
                         onClick={handleResendCode}
@@ -237,8 +245,14 @@ export default function CodeVerification() {
                             : "text-gray-400 cursor-not-allowed"
                         } transition-colors`}
                       >
-                        <RefreshCw className={`w-4 h-4 ${canResend ? "animate-spin-once" : ""}`} />
-                        Resend Code {!canResend && "(available in " + formatTime(timer) + ")"}
+                        <RefreshCw
+                          className={`w-4 h-4 ${
+                            canResend ? "animate-spin-once" : ""
+                          }`}
+                        />
+                        Resend Code{" "}
+                        {!canResend &&
+                          "(available in " + formatTime(timer) + ")"}
                       </button>
                     </div>
 
@@ -339,7 +353,8 @@ export default function CodeVerification() {
                     <div>
                       <h4 className="font-bold">Check Email</h4>
                       <p className="text-amber-100 text-sm">
-                        Look for email from "3OTOR Security" with subject "Verification Code"
+                        Look for email from "3OTOR Security" with subject
+                        "Verification Code"
                       </p>
                     </div>
                   </div>
@@ -364,12 +379,13 @@ export default function CodeVerification() {
                     </code>
                   </div>
                   <p className="text-xs text-gray-500 mt-3">
-                    This is a demo code for testing. In production, this would be sent via email.
+                    This is a demo code for testing. In production, this would
+                    be sent via email.
                   </p>
                 </div>
               </div>
 
-              {/* Help Section */}
+              {/* Help Section
               <div className="bg-white rounded-3xl shadow-xl p-6">
                 <h3 className="text-xl font-bold text-gray-900 mb-4">
                   Need Help?
@@ -401,6 +417,7 @@ export default function CodeVerification() {
                   </div>
                 </div>
               </div>
+               */}
             </div>
           </div>
         </div>

@@ -193,7 +193,7 @@ export default function Categories() {
             </p>
           </div>
           
-          <button className="group relative px-8 py-4 bg-gradient-to-r from-amber-500 to-amber-600 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 min-w-[200px]">
+          <button onClick={()=>navigate('/fragrancequiz')} className="group relative px-8 py-4 bg-gradient-to-r from-amber-500 to-amber-600 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 min-w-[200px]">
             <span className="relative z-10 flex items-center justify-center gap-2">
               Start Quiz
               <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform duration-300" />

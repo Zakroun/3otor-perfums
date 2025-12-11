@@ -14,6 +14,7 @@ import ForgetPassword from "./auth/Forgetpassword";
 import CodeVerfication from "./auth/Codeverfication";
 import ResetPassword from "./auth/ResetPassword";
 import Favorites from "./components/Favorites";
+import FragranceQuiz from "./components/FragranceQuiz";
 function App() {
   return (
     <div className="App">
@@ -26,6 +27,7 @@ function App() {
         <Route path="/product/:id" element={<><Header/><Product /><Footer/></>}/>
         <Route path="/cart" element={<><Header/><Cart /><Footer/></>}/>
         <Route path="/favorites" element={<><Header/><Favorites /><Footer/></>}/>
+        <Route path="/fragrancequiz" element={<><FragranceQuiz /></>}/>
         <Route path="/login" element={<Login/>}/>
         <Route path="/register" element={<Register/>}/>
         <Route path="/forgot-password" element={<ForgetPassword/>}/>

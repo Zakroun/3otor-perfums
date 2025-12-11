@@ -13,7 +13,7 @@ import {
 } from "lucide-react";
 import { FcGoogle } from "react-icons/fc";
 import { Link } from "react-router-dom";
-
+import { useEffect } from "react";
 export default function Register() {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
@@ -32,7 +32,12 @@ export default function Register() {
   const [isLoading, setIsLoading] = useState(false);
   const [registrationSuccess, setRegistrationSuccess] = useState(false);
   const [passwordStrength, setPasswordStrength] = useState(0);
-
+  useEffect(() => {
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
+  }, []);
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
     setFormData((prev) => ({
@@ -91,7 +96,9 @@ export default function Register() {
 
     // Validate password strength
     if (passwordStrength < 2) {
-      alert("Please create a stronger password (at least 8 characters with letters and numbers)");
+      alert(
+        "Please create a stronger password (at least 8 characters with letters and numbers)"
+      );
       setIsLoading(false);
       return;
     }
@@ -268,7 +275,8 @@ export default function Register() {
                         Registration Successful!
                       </h4>
                       <p className="text-emerald-700 text-sm">
-                        Welcome to 3OTOR. Please check your email to verify your account.
+                        Welcome to 3OTOR. Please check your email to verify your
+                        account.
                       </p>
                     </div>
                   </div>
@@ -430,40 +438,74 @@ export default function Register() {
                         )}
                       </button>
                     </div>
-                    
+
                     {/* Password Strength Indicator */}
                     {formData.password && (
                       <div className="mt-3">
                         <div className="flex justify-between text-sm mb-1">
-                          <span className="text-gray-600">Password strength:</span>
-                          <span className={`font-medium ${
-                            passwordStrength === 0 ? "text-red-600" :
-                            passwordStrength === 1 ? "text-orange-600" :
-                            passwordStrength === 2 ? "text-yellow-600" :
-                            passwordStrength === 3 ? "text-green-600" :
-                            "text-emerald-700"
-                          }`}>
+                          <span className="text-gray-600">
+                            Password strength:
+                          </span>
+                          <span
+                            className={`font-medium ${
+                              passwordStrength === 0
+                                ? "text-red-600"
+                                : passwordStrength === 1
+                                ? "text-orange-600"
+                                : passwordStrength === 2
+                                ? "text-yellow-600"
+                                : passwordStrength === 3
+                                ? "text-green-600"
+                                : "text-emerald-700"
+                            }`}
+                          >
                             {getPasswordStrengthText()}
                           </span>
                         </div>
                         <div className="w-full bg-gray-200 rounded-full h-2">
                           <div
                             className={`h-2 rounded-full ${getPasswordStrengthColor()} transition-all duration-300`}
-                            style={{ width: `${(passwordStrength / 4) * 100}%` }}
+                            style={{
+                              width: `${(passwordStrength / 4) * 100}%`,
+                            }}
                           ></div>
                         </div>
                         <div className="mt-2 text-xs text-gray-500">
                           <ul className="grid grid-cols-2 gap-1">
-                            <li className={formData.password.length >= 8 ? "text-green-600" : "text-gray-400"}>
+                            <li
+                              className={
+                                formData.password.length >= 8
+                                  ? "text-green-600"
+                                  : "text-gray-400"
+                              }
+                            >
                               ✓ At least 8 characters
                             </li>
-                            <li className={/[A-Z]/.test(formData.password) ? "text-green-600" : "text-gray-400"}>
+                            <li
+                              className={
+                                /[A-Z]/.test(formData.password)
+                                  ? "text-green-600"
+                                  : "text-gray-400"
+                              }
+                            >
                               ✓ One uppercase letter
                             </li>
-                            <li className={/[0-9]/.test(formData.password) ? "text-green-600" : "text-gray-400"}>
+                            <li
+                              className={
+                                /[0-9]/.test(formData.password)
+                                  ? "text-green-600"
+                                  : "text-gray-400"
+                              }
+                            >
                               ✓ One number
                             </li>
-                            <li className={/[^A-Za-z0-9]/.test(formData.password) ? "text-green-600" : "text-gray-400"}>
+                            <li
+                              className={
+                                /[^A-Za-z0-9]/.test(formData.password)
+                                  ? "text-green-600"
+                                  : "text-gray-400"
+                              }
+                            >
                               ✓ One special character
                             </li>
                           </ul>
@@ -491,7 +533,9 @@ export default function Register() {
                       />
                       <button
                         type="button"
-                        onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                        onClick={() =>
+                          setShowConfirmPassword(!showConfirmPassword)
+                        }
                         className="absolute inset-y-0 right-0 pr-3 flex items-center"
                       >
                         {showConfirmPassword ? (
@@ -528,9 +572,13 @@ export default function Register() {
                         onChange={handleChange}
                         className="w-5 h-5 text-amber-600 rounded focus:ring-amber-500 mt-1"
                       />
-                      <label htmlFor="newsletter" className="ml-2 text-gray-700">
-                        Yes, I want to receive exclusive offers, fragrance tips, and 
-                        updates from 3OTOR via email. I can unsubscribe at any time.
+                      <label
+                        htmlFor="newsletter"
+                        className="ml-2 text-gray-700"
+                      >
+                        Yes, I want to receive exclusive offers, fragrance tips,
+                        and updates from 3OTOR via email. I can unsubscribe at
+                        any time.
                       </label>
                     </div>
 
@@ -558,8 +606,8 @@ export default function Register() {
                           className="text-amber-700 hover:text-amber-800 underline"
                         >
                           Privacy Policy
-                        </Link>
-                        {" "} *
+                        </Link>{" "}
+                        *
                       </label>
                     </div>
                   </div>
@@ -622,7 +670,9 @@ export default function Register() {
                 {socialRegistrations.map((social, index) => (
                   <button
                     key={index}
-                    onClick={() => console.log(`Register with ${social.provider}`)}
+                    onClick={() =>
+                      console.log(`Register with ${social.provider}`)
+                    }
                     className={`flex items-center justify-center py-3 rounded-xl font-medium transition-all duration-300 transform hover:-translate-y-1 ${social.color}`}
                   >
                     {social.icon}
@@ -636,7 +686,7 @@ export default function Register() {
                 <p className="text-gray-600">
                   Already have an account?{" "}
                   <Link
-                    href="/login"
+                    to="/login"
                     className="text-amber-700 hover:text-amber-800 font-semibold underline"
                   >
                     Sign in here
@@ -685,7 +735,8 @@ export default function Register() {
                       <CheckCircle className="w-4 h-4 text-amber-600" />
                     </div>
                     <span className="text-gray-700">
-                      <strong>Personalized Recommendations:</strong> Get fragrance suggestions based on your preferences
+                      <strong>Personalized Recommendations:</strong> Get
+                      fragrance suggestions based on your preferences
                     </span>
                   </li>
                   <li className="flex items-start gap-3">
@@ -693,7 +744,8 @@ export default function Register() {
                       <CheckCircle className="w-4 h-4 text-amber-600" />
                     </div>
                     <span className="text-gray-700">
-                      <strong>Order History:</strong> Track all your purchases in one place
+                      <strong>Order History:</strong> Track all your purchases
+                      in one place
                     </span>
                   </li>
                   <li className="flex items-start gap-3">
@@ -701,7 +753,8 @@ export default function Register() {
                       <CheckCircle className="w-4 h-4 text-amber-600" />
                     </div>
                     <span className="text-gray-700">
-                      <strong>Quick Reorder:</strong> Easily repurchase your favorite fragrances
+                      <strong>Quick Reorder:</strong> Easily repurchase your
+                      favorite fragrances
                     </span>
                   </li>
                   <li className="flex items-start gap-3">
@@ -709,7 +762,8 @@ export default function Register() {
                       <CheckCircle className="w-4 h-4 text-amber-600" />
                     </div>
                     <span className="text-gray-700">
-                      <strong>Priority Support:</strong> Get faster response from our customer service team
+                      <strong>Priority Support:</strong> Get faster response
+                      from our customer service team
                     </span>
                   </li>
                 </ul>
@@ -748,7 +802,7 @@ export default function Register() {
                 </div>
               </div>
 
-              {/* Security Notice */}
+              {/* Security Notice 
               <div className="bg-gradient-to-r from-blue-50 to-blue-100 rounded-3xl border border-blue-200 p-6">
                 <div className="flex items-start gap-3">
                   <div className="w-8 h-8 rounded-full bg-blue-600 flex items-center justify-center flex-shrink-0">
@@ -759,12 +813,13 @@ export default function Register() {
                       Your Security Matters
                     </h4>
                     <p className="text-sm text-gray-600">
-                      We use industry-standard encryption to protect your personal 
-                      information. Your data is safe with us.
+                      We use industry-standard encryption to protect your
+                      personal information. Your data is safe with us.
                     </p>
                   </div>
                 </div>
               </div>
+              */}
             </div>
           </div>
 

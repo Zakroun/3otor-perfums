@@ -1,13 +1,19 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Mail, ArrowLeft, CheckCircle, Sparkles } from "lucide-react";
-
+import { useEffect } from "react";
 export default function ForgetPassword() {
   const [email, setEmail] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [error, setError] = useState("");
   const navigate = useNavigate();
+  useEffect(() => {
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
+  }, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -68,7 +74,8 @@ export default function ForgetPassword() {
             </h2>
 
             <p className="text-gray-600 text-lg max-w-2xl mx-auto">
-              Enter your email address and we'll send you a verification code to reset your password
+              Enter your email address and we'll send you a verification code to
+              reset your password
             </p>
           </div>
 
@@ -85,7 +92,9 @@ export default function ForgetPassword() {
                   </h3>
                   <p className="text-gray-600 mb-6">
                     We've sent a 6-digit verification code to{" "}
-                    <span className="font-semibold text-amber-700">{email}</span>
+                    <span className="font-semibold text-amber-700">
+                      {email}
+                    </span>
                   </p>
                   <p className="text-sm text-gray-500">
                     Redirecting to verification page...
@@ -169,12 +178,12 @@ export default function ForgetPassword() {
               <div className="mt-8 pt-6 border-t border-gray-100">
                 <p className="text-sm text-gray-500 text-center">
                   Need help?{" "}
-                  <a
-                    href="/contact"
+                  <Link
+                    to="/contact"
                     className="text-amber-700 hover:text-amber-800 underline"
                   >
                     Contact Support
-                  </a>
+                  </Link>
                 </p>
               </div>
             </div>
@@ -195,7 +204,8 @@ export default function ForgetPassword() {
                     <div>
                       <h4 className="font-bold">Check Your Email</h4>
                       <p className="text-amber-100 text-sm">
-                        Look for an email from 3OTOR with the subject "Password Reset Code"
+                        Look for an email from 3OTOR with the subject "Password
+                        Reset Code"
                       </p>
                     </div>
                   </div>
@@ -257,7 +267,7 @@ export default function ForgetPassword() {
                 </div>
               </div>
 
-              {/* Timer Info */}
+              {/* Timer Info
               <div className="bg-gradient-to-r from-blue-50 to-blue-100 rounded-3xl border border-blue-200 p-6">
                 <div className="text-center">
                   <div className="text-3xl font-bold text-blue-800 mb-2">
@@ -271,6 +281,7 @@ export default function ForgetPassword() {
                   </p>
                 </div>
               </div>
+               */}
             </div>
           </div>
         </div>

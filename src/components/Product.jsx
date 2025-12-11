@@ -112,6 +112,7 @@ export default function Product() {
       return product.images;
     }
     return product.images.slice(0, 3);
+    
   };
 
   // Handle image error

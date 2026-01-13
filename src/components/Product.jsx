@@ -219,7 +219,7 @@ export default function Product() {
           {/* Left Column - Product Images */}
           <div className="space-y-6">
             {/* Main Image */}
-            <div className="rounded-3xl p-8 md:p-12 flex items-center justify-center min-h-[400px] md:min-h-[500px] relative overflow-hidden group">
+            <div className="rounded-3xl p-8 md:p-8 flex items-center justify-center min-h-[400px] md:min-h-[500px] relative overflow-hidden group">
               <div className="absolute inset-0 opacity-10">
                 <div className="absolute top-1/4 left-1/4 w-32 h-32 bg-amber-300 rounded-full mix-blend-multiply filter blur-3xl"></div>
                 <div className="absolute bottom-1/4 right-1/4 w-32 h-32 bg-rose-300 rounded-full mix-blend-multiply filter blur-3xl"></div>
@@ -228,7 +228,7 @@ export default function Product() {
               {/* Main Product Image */}
               <div className="relative z-10 w-full h-full">
                 <div className="w-full h-full flex items-center justify-center">
-                  <div className="relative w-full h-[400px] md:h-[500px] max-w-md">
+                  <div className="relative w-full h-[300px] md:h-[400px] max-w-md">
                     {product.images ? (
                       <img
                         src={`/assets/images/${product.images[selectedImage]}`}
@@ -274,7 +274,6 @@ export default function Product() {
             {/* Thumbnail Gallery */}
             <div className="space-y-4">
               <div className="flex items-center justify-between">
-                <h3 className="font-bold text-gray-900">Gallery</h3>
                 {product.images && product.images.length > 3 && (
                   <button
                     onClick={() => setShowAllImages(!showAllImages)}
@@ -287,7 +286,7 @@ export default function Product() {
                   </button>
                 )}
               </div>
-              <div className="grid grid-cols-3 md:grid-cols-4 gap-3">
+              <div className="grid grid-cols-3 md:grid-cols-4 pl-6 gap-3">
                 {getGalleryImages().map((image, index) => (
                   <button
                     key={index}

@@ -4,7 +4,7 @@ import Categories from "../components/Categories";
 import BestSellers from "../components/BestSellers";
 
 export default function HomePage() {
-  const [showIntro, setShowIntro] = useState(true);
+  const [showIntro, setShowIntro] = useState(false);
   const [videoStarted, setVideoStarted] = useState(false);
 
   const handleStart = () => {
@@ -26,8 +26,6 @@ export default function HomePage() {
     <div className="min-h-screen pb-10">
       {showIntro ? (
         <div className="fixed top-0 left-0 w-screen h-screen bg-black z-50 flex justify-center items-center">
-
-          {/* Intro video */}
           <video
             id="introVideo"
             className="w-full overflow-y-hidden h-full object-cover"
@@ -35,8 +33,6 @@ export default function HomePage() {
           >
             <source src="/assets/videos/3otor2.mp4" type="video/mp4" />
           </video>
-
-          {/* Center Start Button */}
           {!videoStarted && (
             <button
               onClick={handleStart}

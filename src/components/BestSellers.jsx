@@ -181,7 +181,7 @@ export default function BestSellers() {
           {bestSellers.map((product) => (
             <div
               key={product.id}
-              className={`flex-shrink-0 cursor-pointer px-2 sm:px-3 ${
+              className={`flex-shrink-0 cursor-pointer px-2 sm:px-2 ${
                 itemsPerSlide === 1
                   ? "w-full"
                   : itemsPerSlide === 2
@@ -231,7 +231,7 @@ export default function BestSellers() {
                       <img
                         src={`assets/images/${product.images[0]}`}
                         alt={`${product.title} - ${product.brand}`}
-                        className="w-full h-full object-contain transform transition-transform duration-700 group-hover:scale-110"
+                        className="w-full h-[250px] object-contain transform transition-transform duration-700 group-hover:scale-110"
                         onError={(e) => {
                           // Fallback if image doesn't load
                           e.target.style.display = "none";
@@ -286,9 +286,9 @@ export default function BestSellers() {
                   <h3 className="text-xl font-bold text-amber-900 mb-2 group-hover:text-amber-800 transition-colors">
                     {product.title}
                   </h3>
-                  <p className="text-sm text-amber-700/80 mb-4 font-light leading-relaxed line-clamp-2">
+                  {/* <p className="text-sm text-amber-700/80 mb-4 font-light leading-relaxed line-clamp-2">
                     {product.description}
-                  </p>
+                  </p> */}
 
                   {/* Price */}
                   <div className="flex items-center justify-center gap-2 mb-6">
